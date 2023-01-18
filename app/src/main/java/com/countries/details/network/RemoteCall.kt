@@ -3,13 +3,7 @@ package com.countries.details.network
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.countries.details.model.Country
-
-import java.io.BufferedInputStream
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 
 class RemoteCall private constructor() {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-   >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -13,9 +12,7 @@
         <variable
             name="imageBinding"
             type="com.countries.details.view.adapter.ImageBindingAdapter" />
-
-
-</data>
+    </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +30,6 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:cardElevation = "16dp"
@@ -48,7 +44,7 @@
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
                 android:scaleType = "centerCrop"
-
+                android:contentDescription="@string/country"
                 android:loadImage="@{country.flags.png}"/>
 
         </androidx.cardview.widget.CardView>

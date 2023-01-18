@@ -1,76 +1,54 @@
-@file:Suppress("DEPRECATION")
-
-package com.countries.details.network
-
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkInfo
-import android.os.Build
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
 
-class CheckInternetConnection(private val context: Context) : LiveData<Boolean>() {
-
-    private val connectivityManager: ConnectivityManager =
+class CheckInternetConnection(context: Context) : LiveData<Boolean>() {
+    private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    private lateinit var networkConnectionCallback: ConnectivityManager.NetworkCallback
+    private val networkCallbacks = object : ConnectivityManager.NetworkCallback(){
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            postValue(true)
+        }
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            postValue(false)
+        }
+
+        override fun onUnavailable() {
+            super.onUnavailable()
+            postValue(false)
+        }
+    }
+
+    private fun checkInternet(){
+        val network = connectivityManager.activeNetwork
+        if(network==null){
+            postValue(false)
+        }
+        val requestBuilder =NetworkRequest.Builder().apply {
+            addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+        }.build()
+
+        connectivityManager.registerNetworkCallback(requestBuilder,networkCallbacks)
+    }
 
     override fun onActive() {
         super.onActive()
-
-        updateNetworkConnection()
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback())
-            }
-            else -> {
-                context.registerReceiver(
-                    networkReceiver,
-                    IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-                )
-            }
-        }
+        checkInternet()
     }
 
     override fun onInactive() {
         super.onInactive()
-        try {
-            connectivityManager.unregisterNetworkCallback(connectivityManagerCallback())
-            context.unregisterReceiver(networkReceiver)
-        }catch(Ex:IllegalArgumentException){
-
-        }
-    }
-
-    private fun connectivityManagerCallback(): ConnectivityManager.NetworkCallback {
-
-        networkConnectionCallback = object : ConnectivityManager.NetworkCallback() {
-
-            override fun onLost(network: Network) {
-                super.onLost(network)
-                postValue(false)
-            }
-
-            override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                postValue(true)
-            }
-        }
-        return networkConnectionCallback
-    }
-
-    private fun updateNetworkConnection() {
-        val activeNetworkConnection: NetworkInfo? = connectivityManager.activeNetworkInfo
-        postValue(activeNetworkConnection?.isConnected == true)
-    }
-
-    private val networkReceiver= object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            updateNetworkConnection()
-        }
+        connectivityManager.unregisterNetworkCallback(networkCallbacks)
     }
 }

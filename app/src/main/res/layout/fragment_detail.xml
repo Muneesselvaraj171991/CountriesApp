@@ -9,6 +9,7 @@
             name="country"
             type="com.countries.details.model.Country" />
         <variable name="fragment" type="com.countries.details.view.DetailFragment" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:loadImage="@{country.flags.png}"
+        android:contentDescription="@string/country"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -34,10 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        android:clickable="true"
-        android:contentDescription="Click"
+        android:contentDescription="@string/country"
         android:onClick="@{(v)-> fragment.loadMap()}"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/countryImageView"
         app:layout_constraintEnd_toEndOf="@+id/countryImageView"
         app:layout_constraintLeft_toLeftOf="@+id/countryImageView"
