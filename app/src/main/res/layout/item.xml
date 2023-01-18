@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   >
+
+    <data>
+        <variable
+            name="country" type="com.countries.details.model.Country" />
+
+        <variable
+            name="listener"
+            type="com.countries.details.view.adapter.CountryAdapter.ItemClick" />
+        <variable
+            name="imageBinding"
+            type="com.countries.details.view.adapter.ImageBindingAdapter" />
+
+
+</data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> listener.onClick(country)}"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardElevation = "16dp"
+            app:cardCornerRadius = "160dp"
+            android:layout_margin = "16dp"
+            android:foregroundGravity = "center"
+            android:layout_centerInParent = "true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+            <ImageView
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:scaleType = "centerCrop"
+
+                android:loadImage="@{country.flags.png}"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/countrynameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/dark_gray"
+            android:text="@{country.name.common}"
+            android:typeface="serif"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            app:layout_constraintBottom_toTopOf="@+id/countrycaptialTextView"
+            app:layout_constraintStart_toEndOf="@+id/cardview"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/countrycaptialTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{country.capital.get(0)}"
+            android:textColor="@color/gray"
+            android:typeface="serif"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="@+id/countrynameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/countrynameTextView" />
+        <TextView
+            android:id="@+id/countryregionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{country.region}"
+            android:textColor="@color/gray"
+            android:typeface="serif"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="@+id/countrycaptialTextView"
+            app:layout_constraintTop_toBottomOf="@+id/countrycaptialTextView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
