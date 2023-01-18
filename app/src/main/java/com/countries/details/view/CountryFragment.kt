@@ -44,8 +44,6 @@ class CountryFragment : Fragment() {
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
                 model.countryLiveData.observe(viewLifecycleOwner) { countryList: List<Country> ->
                     if(!countryList.isEmpty()) {
-
-
                         val adapter =
                             CountryAdapter(countryList, object : CountryAdapter.ItemClick {
                                 override fun onClick(country: Country) {
