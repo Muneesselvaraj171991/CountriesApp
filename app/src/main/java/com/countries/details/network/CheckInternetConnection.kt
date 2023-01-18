@@ -40,7 +40,7 @@ class CheckInternetConnection(private val context: Context) : LiveData<Boolean>(
         super.onInactive()
         try {
             connectivityManager.unregisterNetworkCallback(connectivityManagerCallback())
-            context.unregisterReceiver(networkReceiver);
+            context.unregisterReceiver(networkReceiver)
         }catch(Ex:IllegalArgumentException){
 
         }

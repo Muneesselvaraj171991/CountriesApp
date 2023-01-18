@@ -15,38 +15,25 @@ import java.net.URL
 class RemoteCall private constructor() {
     private val mGson: Gson
     private var mUrl: URL? = null
-
     init {
         mGson = Gson()
+        mUrl = URL(URL)
+    }
+    fun getCountryList(result: Result) {
         try {
-            mUrl = URL(URL)
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
+            val urlConnection = mUrl!!.openConnection() as HttpURLConnection
+            val data = urlConnection.inputStream.bufferedReader().readText()
+            val typeOfT =
+                TypeToken.getParameterized(MutableList::class.java, Country::class.java).type
+            result.onResponse(mGson.fromJson(data, typeOfT))
+        } catch (e: Exception) {
+         result.onFailure()
         }
     }
-
-     fun getCountryList(result: Result) {
-         val urlConnection = mUrl!!.openConnection() as HttpURLConnection
-         val `in`: InputStream = BufferedInputStream(urlConnection.inputStream)
-         val typeOfT = TypeToken.getParameterized(MutableList::class.java, Country::class.java).type
-         result.onResponse(mGson.fromJson(readStream(`in`), typeOfT))
-     }
-
-    @Throws(IOException::class)
-    private fun readStream(`is`: InputStream): String {
-        val outputStream = ByteArrayOutputStream()
-        var readBuffer = `is`.read()
-        while (readBuffer != -1) {
-            outputStream.write(readBuffer)
-            readBuffer = `is`.read()
-        }
-        return outputStream.toString()
-    }
-
     interface Result {
         fun onResponse(countryList: List<Country>)
+        fun onFailure()
     }
-
     companion object {
         private const val URL = "https://restcountries.com/v3.1/all"
         private var sRemoteCall: RemoteCall? = null

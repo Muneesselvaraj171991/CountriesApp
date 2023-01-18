@@ -18,20 +18,17 @@ class CountryViewModel : ViewModel() {
             fetchData()
         }
         }
-
         private suspend fun fetchData() {
-
             mRemoteCall.getCountryList(object : RemoteCall.Result {
                 override fun onResponse(countryList: List<Country>) {
                     mCountLivedata.postValue(countryList)
                 }
+                override fun onFailure() {
+                    mCountLivedata.postValue(emptyList())
+                }
 
             })
         }
-
-
-
-
 
     val countryLiveData: LiveData<List<Country>>
         get() = mCountLivedata

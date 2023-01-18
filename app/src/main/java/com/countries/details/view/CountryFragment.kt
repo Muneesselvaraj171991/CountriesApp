@@ -19,12 +19,16 @@ import com.countries.details.view.adapter.CountryAdapter
 
 
 import com.countries.details.viewmodel.CountryViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class CountryFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_country, container, false)
     }
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,15 +43,24 @@ class CountryFragment : Fragment() {
                 model.init()
                 val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
                 model.countryLiveData.observe(viewLifecycleOwner) { countryList: List<Country> ->
-                    val adapter = CountryAdapter(countryList, object : CountryAdapter.ItemClick {
-                        override fun onClick(country: Country) {
-                            val bundle = Bundle()
-                            bundle.putParcelable(BUNDLE_KEY, country)
-                            findNavController(view).navigate(R.id.detailFragment, bundle)
-                        }
-                    })
-                    recyclerView.adapter = adapter
+                    if(!countryList.isEmpty()) {
+
+
+                        val adapter =
+                            CountryAdapter(countryList, object : CountryAdapter.ItemClick {
+                                override fun onClick(country: Country) {
+                                    val bundle = Bundle()
+                                    bundle.putParcelable(BUNDLE_KEY, country)
+                                    findNavController(view).navigate(R.id.detailFragment, bundle)
+                                }
+                            })
+                        recyclerView.adapter = adapter
+                    } else {
+                        val snack = Snackbar.make(view,"Unable to fetch countryList",Snackbar.LENGTH_LONG)
+                        snack.show()
+                    }
                     progressBar.visibility = View.GONE
+
                 }
                 recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
@@ -56,7 +69,9 @@ class CountryFragment : Fragment() {
 
                 textviewCheckConnection.visibility = View.VISIBLE
             }
+
         }
+
        }
 
     companion object {
