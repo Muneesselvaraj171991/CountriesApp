@@ -3,7 +3,7 @@
 
 # CountriesApp
 
-CountriesApp is my assignment task for SCANIA.
+CountriesApp in Kotlin.
 
 Programing Language : Kotlin
 IDE : Android Studio Electric Eel | 2022.1.1
